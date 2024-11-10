@@ -121,6 +121,23 @@ public class Model_SanPham {
         this.tenSP = tenSP;
         this.id = id;
     }
+
+    public Model_SanPham(String maSP, String tenSP, int soLuongTonKho, double gia,String cpu) {
+        this.maSP = maSP;
+        this.tenSP = tenSP;
+        this.soLuongTonKho = soLuongTonKho;
+        this.gia = gia;
+        this.cpu = cpu;
+    }
+
+    public Model_SanPham(String maSP, int soLuongTonKho, double gia, String cpu, int id) {
+        this.maSP = maSP;
+        this.soLuongTonKho = soLuongTonKho;
+        this.gia = gia;
+        this.cpu = cpu;
+        this.id = id;
+    }
+    
     
 
     // Phương thức toString để hiển thị thông tin sản phẩm
@@ -130,5 +147,8 @@ public class Model_SanPham {
     }
     public Object toData_CTSP(){
         return new Object[]{maSP,soLuongTonKho,gia,cpu,gpu,ram,mauSac,dungLuong};
+    }
+    public Object toData_GioHang(){
+        return new Object[]{id,maSP,gia,soLuongTonKho,cpu};
     }
 }

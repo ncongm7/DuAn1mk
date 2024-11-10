@@ -6,9 +6,11 @@ package View.form;
 
 import Model.Model_HoaDon;
 import Model.Model_SanPham;
+import Repository.Repository_HDCT;
 import Repository.Repository_HoaDon;
 import Repository.reponsitory_SanPham;
 import Repository.reponsitory_getImei;
+import com.google.zxing.qrcode.decoder.Mode;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,9 +28,11 @@ public class Form_BH extends javax.swing.JPanel {
     DefaultTableModel model;
     DefaultTableModel model_SPChitiet;
     DefaultTableModel model_HoaDon;
+    DefaultTableModel model_GioHang;
     private reponsitory_SanPham rp = new reponsitory_SanPham();
     private reponsitory_getImei rpImei = new reponsitory_getImei();
     private  Repository_HoaDon rpHD =new Repository_HoaDon();
+    private  Repository_HDCT rpHDCT =new Repository_HDCT();
 
     public Form_BH() {
         initComponents();
@@ -123,6 +127,11 @@ public class Form_BH extends javax.swing.JPanel {
                 "STT", "Mã HD", "Ngày thanh toán", "Mã NV", "Tình trạng"
             }
         ));
+        tbl_hoadon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_hoadonMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_hoadon);
 
         btn_HoaDon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-add-30.png"))); // NOI18N
@@ -175,6 +184,11 @@ public class Form_BH extends javax.swing.JPanel {
                 "STT", "Mã SP", "Đơn giá", "Số lượng", "Imei", "Thành tiền"
             }
         ));
+        tbl_GioHang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_GioHangMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_GioHang);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -554,27 +568,66 @@ public class Form_BH extends javax.swing.JPanel {
 
     public String getImei() {
         int i = tbl_DSSP.getSelectedRow();
+        String getMaIemi=null;
         String maImei = tbl_DSSP.getValueAt(i, 0).toString();
 
         if (i != -1) {
 
             System.out.println("Mã sản phẩm được chọn: " + maImei); // Debug mã sản phẩm
-            openImeiDialog(maImei);
+          getMaIemi =   openImeiDialog(maImei);
         }
-        return maImei;
+        return getMaIemi;
     }
 
-    private void openImeiDialog(String productId) {
+    private String openImeiDialog(String productId) {
         System.out.println("Đang mở IMEI dialog cho sản phẩm: " + productId);
         ImeiDialog imeiDialog = new ImeiDialog(null, productId);
+       
         imeiDialog.setVisible(true); // Hiển thị dialog
+         return imeiDialog.selectedImei;
+    }
+    
+    Model_SanPham readForm_GioHang(int i){
+        
+        String maSp=tbl_DSSP.getValueAt(i, 0).toString();
+        int soLuong=1;
+        double donGia=Double.parseDouble(tbl_DSSP.getValueAt(i, 2).toString());
+        String Imei=getImei();
+        String maHD=lbl_MaHD.getText();
+        Model_SanPham sp=new Model_SanPham(maSp, Imei, soLuong, donGia, maHD);
+        return sp;
+    }
+    void getAllGiohangtb(ArrayList<Model_SanPham> sp){
+        model_GioHang=(DefaultTableModel) tbl_GioHang.getModel();
+        model_GioHang.setRowCount(0);
+        for (Model_SanPham model_SanPham : sp) {
+           model_GioHang.addRow((Object[]) model_SanPham.toData_GioHang());
+        }
     }
     private void tbl_DSSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_DSSPMouseClicked
         // TODO add your handling code here:
-        getImei();
+        int i=tbl_DSSP.getSelectedRow();
+        rpHDCT.ThemGioHang(readForm_GioHang(i));
+       
+        getAllGiohangtb(rpHDCT.getAllGioHangTamThoi(lbl_MaHD.getText()));
+        
 
 
     }//GEN-LAST:event_tbl_DSSPMouseClicked
+    void getMaHoaDon(){
+        int i=tbl_hoadon.getSelectedRow();
+        String maHD=tbl_hoadon.getValueAt(i, 1).toString();
+        lbl_MaHD.setText(maHD);
+    }
+    private void tbl_hoadonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_hoadonMouseClicked
+        // TODO add your handling code here:
+        getMaHoaDon();
+         getAllGiohangtb(rpHDCT.getAllGioHangTamThoi(lbl_MaHD.getText()));
+    }//GEN-LAST:event_tbl_hoadonMouseClicked
+
+    private void tbl_GioHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_GioHangMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbl_GioHangMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

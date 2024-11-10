@@ -9,6 +9,15 @@ import java.util.ArrayList;
 public class ImeiDialog extends JDialog {
     private JList<String> imeiJList;
     private JButton btnSelect;
+    public  String selectedImei;
+
+    public String getSelectedImei() {
+        return selectedImei;
+    }
+
+    public void setSelectedImei(String selectedImei) {
+        this.selectedImei = selectedImei;
+    }
 
     public ImeiDialog(JFrame parent, String productId) {
         super(parent, "Danh sách IMEI", true);
@@ -25,7 +34,7 @@ public class ImeiDialog extends JDialog {
         // Nút chọn IMEI
         btnSelect = new JButton("Chọn");
         btnSelect.addActionListener(e -> {
-            String selectedImei = imeiJList.getSelectedValue();
+             selectedImei = imeiJList.getSelectedValue();
             if (selectedImei != null) {
                 JOptionPane.showMessageDialog(ImeiDialog.this,
                         "Bạn đã chọn IMEI: " + selectedImei,
