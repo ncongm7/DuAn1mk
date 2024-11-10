@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package test;
 
+import Repository.reponsitory_getImei;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
+import java.util.ArrayList;
 
 public class ImeiDialog extends JDialog {
     private JList<String> imeiJList;
@@ -32,20 +24,17 @@ public class ImeiDialog extends JDialog {
 
         // Nút chọn IMEI
         btnSelect = new JButton("Chọn");
-        btnSelect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedImei = imeiJList.getSelectedValue();
-                if (selectedImei != null) {
-                    JOptionPane.showMessageDialog(ImeiDialog.this,
-                            "Bạn đã chọn IMEI: " + selectedImei,
-                            "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    dispose(); // Đóng dialog
-                } else {
-                    JOptionPane.showMessageDialog(ImeiDialog.this,
-                            "Vui lòng chọn một IMEI!",
-                            "Lỗi", JOptionPane.WARNING_MESSAGE);
-                }
+        btnSelect.addActionListener(e -> {
+            String selectedImei = imeiJList.getSelectedValue();
+            if (selectedImei != null) {
+                JOptionPane.showMessageDialog(ImeiDialog.this,
+                        "Bạn đã chọn IMEI: " + selectedImei,
+                        "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                dispose(); // Đóng dialog
+            } else {
+                JOptionPane.showMessageDialog(ImeiDialog.this,
+                        "Vui lòng chọn một IMEI!",
+                        "Lỗi", JOptionPane.WARNING_MESSAGE);
             }
         });
         add(btnSelect, BorderLayout.SOUTH);
@@ -55,14 +44,8 @@ public class ImeiDialog extends JDialog {
     }
 
     private List<String> getImeisByProductId(String productId) {
+        reponsitory_getImei rp = new reponsitory_getImei();
         // Trả về danh sách IMEI dựa trên mã sản phẩm
-        if ("SP001".equals(productId)) {
-            return List.of("IMEI001", "IMEI002", "IMEI003");
-        } else if ("SP002".equals(productId)) {
-            return List.of("IMEI004", "IMEI005", "IMEI006");
-        } else if ("SP003".equals(productId)) {
-            return List.of("IMEI007", "IMEI008", "IMEI009");
-        }
-        return List.of(); // Trả về danh sách rỗng nếu không tìm thấy sản phẩm
+        return rp.getAllImei(productId);
     }
 }

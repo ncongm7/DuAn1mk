@@ -395,6 +395,9 @@
                   <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_DSSPMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -858,7 +861,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="lbl_MaNV">
               <Properties>
-                <Property name="text" type="java.lang.String" value="admin"/>
+                <Property name="text" type="java.lang.String" value="NV001"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lbl_Gio">

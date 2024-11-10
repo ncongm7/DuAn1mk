@@ -9,9 +9,11 @@ package Model;
  * @author Admin
  */
 public class Model_HoaDon {
+
     private String maHD, maKH, tenKH, sdt, id_NV, ngaythanhtoan, maVoucher;
     private double tongtienBD, tongKM, tongtiensauKM;
     private boolean trangthai;
+    private int id;
 
     public Model_HoaDon() {
     }
@@ -28,6 +30,22 @@ public class Model_HoaDon {
         this.tongKM = tongKM;
         this.tongtiensauKM = tongtiensauKM;
         this.trangthai = trangthai;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Model_HoaDon(String maHD, String id_NV, String ngaythanhtoan, boolean trangthai, int id) {
+        this.maHD = maHD;
+        this.id_NV = id_NV;
+        this.ngaythanhtoan = ngaythanhtoan;
+        this.trangthai = trangthai;
+        this.id = id;
     }
 
     public String getMaHD() {
@@ -117,8 +135,13 @@ public class Model_HoaDon {
     public void setTrangthai(boolean trangthai) {
         this.trangthai = trangthai;
     }
-    
-    public Object[] ToDataRow(){
-        return new Object[] {this.maHD, this.maKH, this.tenKH, this.sdt, this.id_NV, this.ngaythanhtoan, this.tongtienBD, this.tongKM, this.maVoucher, this.tongtiensauKM, this.trangthai?"Đã thanh toán":"Chưa thanh toán"};
+
+    public Object[] ToDataRow() {
+        return new Object[]{this.maHD, this.maKH, this.tenKH, this.sdt, this.id_NV, this.ngaythanhtoan, this.tongtienBD, this.tongKM, this.maVoucher, this.tongtiensauKM, this.trangthai ? "Đã thanh toán" : "Chưa thanh toán"};
     }
+
+    public Object[] toDataHoaDonCho() {
+        return new Object[]{id,maHD,ngaythanhtoan,id_NV,trangthai?"Đã Thanh Toán":"Chờ Thanh Toan"};
+    }
+
 }

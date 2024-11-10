@@ -4,10 +4,15 @@
  */
 package View.form;
 
+import Model.Model_HoaDon;
 import Model.Model_SanPham;
+import Repository.Repository_HoaDon;
 import Repository.reponsitory_SanPham;
+import Repository.reponsitory_getImei;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import test.ImeiDialog;
 
 /**
  *
@@ -18,15 +23,18 @@ public class Form_BH extends javax.swing.JPanel {
     /**
      * Creates new form Form_SP
      */
-    
     DefaultTableModel model;
     DefaultTableModel model_SPChitiet;
+    DefaultTableModel model_HoaDon;
     private reponsitory_SanPham rp = new reponsitory_SanPham();
+    private reponsitory_getImei rpImei = new reponsitory_getImei();
+    private  Repository_HoaDon rpHD =new Repository_HoaDon();
+
     public Form_BH() {
         initComponents();
         fillToTable_ChiTiet(rp.gettAll_SpChiTiet());
     }
-    
+
     void fillToTable(ArrayList<Model_SanPham> ds) {
         model = (DefaultTableModel) tbl_DSSP.getModel();
         model.setRowCount(0);
@@ -204,6 +212,11 @@ public class Form_BH extends javax.swing.JPanel {
                 "Mã SP", "Số lượng tồn kho", "Giá", "CPU", "GPU", "Ram", "Màu sắc", "Dung lượng"
             }
         ));
+        tbl_DSSP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_DSSPMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tbl_DSSP);
 
         btn_timkiemDSSP.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -447,7 +460,7 @@ public class Form_BH extends javax.swing.JPanel {
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/User.png"))); // NOI18N
 
-        lbl_MaNV.setText("admin");
+        lbl_MaNV.setText("NV001");
 
         lbl_Gio.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_Gio.setText("19:01:02");
@@ -518,14 +531,50 @@ public class Form_BH extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    void fillHoaDOnCho(ArrayList<Model_HoaDon> ds){
+        
+        model_HoaDon=(DefaultTableModel) tbl_hoadon.getModel();
+        model_HoaDon.setRowCount(0);
+        for (Model_HoaDon d : ds) {
+            model_HoaDon.addRow(d.toDataHoaDonCho());
+        }
+        
+    }
     private void btn_HoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_HoaDonActionPerformed
         // TODO add your handling code here:
+        String maHd=lbl_MaNV.getText();
+        String maNV=lbl_MaNV.getText();
+        fillHoaDOnCho(rpHD.getChoHoaDon(maHd, maNV));
     }//GEN-LAST:event_btn_HoaDonActionPerformed
 
     private void btn_timkiemDSSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_timkiemDSSPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_timkiemDSSPActionPerformed
+
+    public String getImei() {
+        int i = tbl_DSSP.getSelectedRow();
+        String maImei = tbl_DSSP.getValueAt(i, 0).toString();
+
+        if (i != -1) {
+
+            System.out.println("Mã sản phẩm được chọn: " + maImei); // Debug mã sản phẩm
+            openImeiDialog(maImei);
+        }
+        return maImei;
+    }
+
+    private void openImeiDialog(String productId) {
+        System.out.println("Đang mở IMEI dialog cho sản phẩm: " + productId);
+        ImeiDialog imeiDialog = new ImeiDialog(null, productId);
+        imeiDialog.setVisible(true); // Hiển thị dialog
+    }
+    private void tbl_DSSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_DSSPMouseClicked
+        // TODO add your handling code here:
+        getImei();
+
+
+    }//GEN-LAST:event_tbl_DSSPMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
